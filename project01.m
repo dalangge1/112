@@ -9,10 +9,10 @@ close all
 % The next few lines define variables for the locations and types of image files
 % we will be reading and writing. You  will likely want to change the input and
 % output directories to match you personal environment.
-input_dir = '../../data/prokudin-gorsky/small/';
-output_dir = './out';
+input_dir = 'prokudin-gorsky/small/';
+output_dir = './output';
 file_ext = 'tif';
-file_name = '00888a_tiny.tif';
+file_name = '00888a_small.tif';
 
 
 %% Read image file
@@ -31,9 +31,63 @@ B = I(1:v_sz,:);
 G = I(v_sz+1:2*v_sz,:);
 R = I(2*v_sz+1:3*v_sz,:);
 
-J = cat(3, R, G, B);
+orig = cat(3, R, G, B);
+
+pyrH = 5;
+baseVRange = uint8(v_sz / (2^pyrH));
+baseHRange = uint8(h_sz / (2^pyrH));
+
+upperbv = baseVRange;
+lowerbv = 0;
+uppergv = baseVRange;
+lowergv = 0;
+upperbh = baseHRange;
+lowerbh = 0;
+uppergh = baseHRange;
+lowergh = 0;
+
+bv = 0;
+bh = 0;
+gv = 0;
+gh = 0;
+
+for i = pyrH:-1:0
+    scale = 1 / (2^i);
+    tB = imresize(B, scale);
+    tG = imresize(G, scale);
+    tR = imresize(R, scale);
+    sizeH = uint8(h_sz / (2^i));
+    sizeV = uint8(v_sz / (2^i));
+    [ bv, bh, gv, gh ] = bfalign(tB, tG, tR, sizeH, sizeV, upperbv, lowerbv, uppergv, lowergv, upperbh, lowerbh, uppergh, lowergh);
+    upperbv = 2 * (bv + 1);
+    lowerbv = 2 * (bv - 1);
+    uppergv = 2 * (gv + 1);
+    lowergv = 2 * (gv - 1);
+    upperbh = 2 * (bh + 1);
+    lowerbh = 2 * (bh - 1);
+    uppergh = 2 * (gh + 1);
+    lowergh = 2 * (gh - 1);
+    
+    img = cat(3, tR, tG, tB);
+    figure
+    imshow(img)
+
+end
+
+B = circshift(B, [bv bh]);
+G = circshift(G, [gv gh]);
+
+new = cat(3, R, G, B);
 
 figure
-imshow(J)
+imshow(orig)
+figure
+imshow(new)
+% figure 
+% imshow(B)
+% figure
+% imshow(G)
+% figure
+% imshow(R)
 
 
