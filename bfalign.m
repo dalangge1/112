@@ -3,9 +3,13 @@ function [ bv, bh, gv, gh ] = bfalign( B, G, R, sizeH, sizeV, upperbv, lowerbv, 
     borderH = uint8(.25 * sizeH);
     borderV = uint8(.25 * sizeV);
     
-    patchB = B(borderH:(sizeH-borderH), borderV:(sizeV-borderV));
-    patchG = G(borderH:(sizeH-borderH), borderV:(sizeV-borderV));
-    patchR = R(borderH:(sizeH-borderH), borderV:(sizeV-borderV));
+%     patchB = B(borderH:(sizeH-borderH), borderV:(sizeV-borderV));
+%     patchG = G(borderH:(sizeH-borderH), borderV:(sizeV-borderV));
+%     patchR = R(borderH:(sizeH-borderH), borderV:(sizeV-borderV));
+%     
+    patchB = B;
+    patchG = G;
+    patchR = R;
    
 
 
@@ -54,6 +58,7 @@ function [ bv, bh, gv, gh ] = bfalign( B, G, R, sizeH, sizeV, upperbv, lowerbv, 
     
     bv = global_iv;
     bh = global_ih;
+    
     gv = global_jv;
     gh = global_jh;
     
