@@ -12,7 +12,7 @@ close all
 input_dir = 'prokudin-gorsky/';
 output_dir = './output';
 file_ext = 'tif';
-file_name = 'small/00888a_small.tif';
+file_name = '00882a.tif';
 
 
 %% Read image file
@@ -33,16 +33,16 @@ R = I(2*v_sz+1:3*v_sz,:);
 
 orig = cat(3, R, G, B);
 
-pyrH = 1;
-baseVRange = 5;
-baseHRange = 5;
+pyrH = 4;
+baseVRange = 20;
+baseHRange = 20;
 
 
-scale = 1 / (2^4);
-tB = imresize(B, scale);
-tG = imresize(G, scale);
-tR = imresize(R, scale);
-[v, h] = size(tR);
+% scale = 1 / (2^4);
+% tB = imresize(B, scale);
+% tG = imresize(G, scale);
+% tR = imresize(R, scale);
+% [v, h] = size(tR);
 % baseVRange = 20;
 % baseHRange = 20;
 
@@ -55,24 +55,24 @@ lowerbh = -baseHRange;
 uppergh = baseHRange;
 lowergh = -baseHRange;
 
-bv = 0;
-bh = 0;
-gv = 0;
-gh = 0;
-
-[ bv, bh, gv, gh ] = bfalign(tB, tG, tR, h, v, upperbv, lowerbv, uppergv, lowergv, upperbh, lowerbh, uppergh, lowergh);
-
-bv
-bh
-gv
-gh
-
-
-
-tB = circshift(tB, [bv bh]);
-tG = circshift(tG, [gv gh]);
-
-new = cat(3, tR, tG, tB);
+% bv = 0;
+% bh = 0;
+% gv = 0;
+% gh = 0;
+% 
+% [ bv, bh, gv, gh ] = bfalign(tB, tG, tR, h, v, upperbv, lowerbv, uppergv, lowergv, upperbh, lowerbh, uppergh, lowergh);
+% 
+% bv
+% bh
+% gv
+% gh
+% 
+% 
+% 
+% tB = circshift(tB, [bv bh]);
+% tG = circshift(tG, [gv gh]);
+% 
+% new = cat(3, tR, tG, tB);
 
 % figure
 % imshow(orig)
@@ -81,7 +81,7 @@ new = cat(3, tR, tG, tB);
 
 
 
-for i = 4:-1:0
+for i = pyrH:-1:0
     scale = 1 / (2^i);
     tB = imresize(B, scale);
     tG = imresize(G, scale);
@@ -89,12 +89,12 @@ for i = 4:-1:0
     [sizeH, sizeV] = size(tB);
     [ bv, bh, gv, gh ] = bfalign(tB, tG, tR, sizeH, sizeV, upperbv, lowerbv, uppergv, lowergv, upperbh, lowerbh, uppergh, lowergh);
 
-    i
-    bv
-    bh
-    gv
-    gh
- 
+%     i
+%     bv
+%     bh
+%     gv
+%     gh
+%  
     upperbv = 2 * (bv + 1);
     lowerbv = 2 * (bv - 1);
     uppergv = 2 * (gv + 1);
@@ -119,6 +119,8 @@ figure
 imshow(orig)
 figure
 imshow(new)
+
+% imwrite(new, [output_dir file_name(1:end-3) '_aligned.' file_ext]);
 % figure 
 % imshow(B)
 % figure
