@@ -12,7 +12,7 @@ close all
 input_dir = 'prokudin-gorsky/';
 output_dir = './output';
 file_ext = 'tif';
-file_name = '00882a.tif';
+file_name = '00888a.tif';
 
 
 %% Read image file
@@ -26,94 +26,56 @@ I = im2double(I);
 [v_sz, h_sz] = size(I);
 v_sz = floor(v_sz / 3);
 
-%% Split image into three color channels
+%% Split image into three color channels, create unaligned image
 B = I(1:v_sz,:);
 G = I(v_sz+1:2*v_sz,:);
 R = I(2*v_sz+1:3*v_sz,:);
 
 orig = cat(3, R, G, B);
 
-pyrH = 4;
-baseVRange = 20;
-baseHRange = 20;
+%% Human Touch Bell and Whistle
+%[B, G, R] = humantouch(B, G, R);
+
+%% Pyramid resizing and aligning
+[B, G, R] = pyramidalign(B, G, R);
+
+%% Show unaligned and aligned images
+new = cat(3, R, G, B);
+
+figure
+imshow(orig)
+figure
+imshow(new);
+
+return;
+
+%% Additional Stuff in Progress
 
 
-% scale = 1 / (2^4);
-% tB = imresize(B, scale);
-% tG = imresize(G, scale);
-% tR = imresize(R, scale);
-% [v, h] = size(tR);
-% baseVRange = 20;
-% baseHRange = 20;
+figure
+imshow(histeq(rgb2gray(new)))
+% BW1 = edge(new,'sobel');
+% BW2 = edge(new,'canny', .2);
 
-upperbv = baseVRange;
-lowerbv = -baseVRange;
-uppergv = baseVRange;
-lowergv = -baseVRange;
-upperbh = baseHRange;
-lowerbh = -baseHRange;
-uppergh = baseHRange;
-lowergh = -baseHRange;
+for ii = 1:3
+    new(:,:,ii) = medfilt2(new(:,:,ii),[100 100]);
+end
 
-% bv = 0;
-% bh = 0;
-% gv = 0;
-% gh = 0;
-% 
-% [ bv, bh, gv, gh ] = bfalign(tB, tG, tR, h, v, upperbv, lowerbv, uppergv, lowergv, upperbh, lowerbh, uppergh, lowergh);
-% 
-% bv
-% bh
-% gv
-% gh
-% 
-% 
-% 
-% tB = circshift(tB, [bv bh]);
-% tG = circshift(tG, [gv gh]);
-% 
-% new = cat(3, tR, tG, tB);
+figure
+imshow(new)
+new = rgb2gray(new);
+BW1 = edge(new,'sobel');
+BW2 = edge(new,'canny', .1);
 
-% figure
-% imshow(orig)
-% figure
+figure
+imshow(BW1)
+figure
+imshow(histeq(BW2))
 % imshow(new)
 
 
 
-for i = pyrH:-1:0
-    scale = 1 / (2^i);
-    tB = imresize(B, scale);
-    tG = imresize(G, scale);
-    tR = imresize(R, scale);
-    [sizeH, sizeV] = size(tB);
-    [ bv, bh, gv, gh ] = bfalign(tB, tG, tR, sizeH, sizeV, upperbv, lowerbv, uppergv, lowergv, upperbh, lowerbh, uppergh, lowergh);
-
-%     i
-%     bv
-%     bh
-%     gv
-%     gh
-%  
-    upperbv = 2 * (bv + 1);
-    lowerbv = 2 * (bv - 1);
-    uppergv = 2 * (gv + 1);
-    lowergv = 2 * (gv - 1);
-    upperbh = 2 * (bh + 1);
-    lowerbh = 2 * (bh - 1);
-    uppergh = 2 * (gh + 1);
-    lowergh = 2 * (gh - 1);
-    
-    %img = cat(3, tR, tG, tB);
-    %figure
-    %imshow(img)
-
-end
-
-B = circshift(B, [bv bh]);
-G = circshift(G, [gv gh]);
-
-new = cat(3, R, G, B);
+return;
 
 figure
 imshow(orig)
