@@ -1,4 +1,8 @@
 function [ bv, bh, gv, gh ] = bfalign( B, G, R, sizeH, sizeV, ranges)
+%BFALIGN Brute force alignment of images B, G, and R
+%   This function calculates the number images B and G must shift
+%   both horizontally and vertically to align with image R using 
+%   the sum of squared differences.
 
     borderH = floor(.25 * sizeH);
     borderV = floor(.25 * sizeV);

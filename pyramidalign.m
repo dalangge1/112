@@ -1,5 +1,12 @@
 function [ newB, newG, newR ] = pyramidalign( oldB, oldG, oldR )
-    
+%PYRAMIDALIGN Alignment of images B, G, and R using brute force
+%on smaller versions of oldB, oldG, and oldR and scaling up.
+%   This function calculates the number of pixels images B 
+%   and G must shift both horizontally and vertically to align
+%   with image R. It uses brute force alignment on smaller 
+%   versions of the images and refines the shift values as it
+%   looks at larger and larger versions of the images.
+
     pyrH = 4; % Depth of pyramid
     
     ranges = [20 -20;  % blue vertical range
@@ -25,9 +32,5 @@ function [ newB, newG, newR ] = pyramidalign( oldB, oldG, oldR )
     newB = circshift(oldB, [bv bh]);
     newG = circshift(oldG, [gv gh]);
     newR = oldR;
-    
-    blueshift = [bv bh]
-    greenshift = [gv gh]
-
 end
 
