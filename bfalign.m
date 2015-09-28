@@ -3,9 +3,9 @@ function [ bv, bh, gv, gh ] = bfalign( B, G, R, sizeH, sizeV, ranges)
     borderH = floor(.25 * sizeH);
     borderV = floor(.25 * sizeV);
     
-    patchB = B(borderH:(sizeH-borderH), borderV:(sizeV-borderV));
-    patchG = G(borderH:(sizeH-borderH), borderV:(sizeV-borderV));
-    patchR = R(borderH:(sizeH-borderH), borderV:(sizeV-borderV));
+    patchB = B(borderV:(sizeV-borderV), borderH:(sizeH-borderH));
+    patchG = G(borderV:(sizeV-borderV), borderH:(sizeH-borderH));
+    patchR = R(borderV:(sizeV-borderV), borderH:(sizeH-borderH));
 
     %Vertical shifting
     global_iv = 1;
@@ -15,11 +15,13 @@ function [ bv, bh, gv, gh ] = bfalign( B, G, R, sizeH, sizeV, ranges)
     for i = ranges(1,2):ranges(1,1)
         tB = circshift(patchB, [i 0]);
         RB = ssd(patchR, tB);
+        
         for j = ranges(2,2):ranges(2,1)
             tG = circshift(patchG, [j 0]);
             GR = ssd(tG, patchR);
             GB = ssd(tG, tB);
             avg = GR + RB + GB;
+            
             if avg < global_minv
                 global_minv = avg;
                 global_iv = i;
@@ -27,7 +29,6 @@ function [ bv, bh, gv, gh ] = bfalign( B, G, R, sizeH, sizeV, ranges)
             end
         end
     end
-
 
     % Horizontal shifting
     global_ih = 1;
@@ -37,11 +38,13 @@ function [ bv, bh, gv, gh ] = bfalign( B, G, R, sizeH, sizeV, ranges)
     for i = ranges(3,2):ranges(3,1)
         tB = circshift(patchB, [0 i]);
         RB = ssd(patchR, tB);
+        
         for j = ranges(4,2):ranges(4,1)
             tG = circshift(patchG, [0 j]);
             GR = ssd(tG, patchR);
             GB = ssd(tG, tB);
             avg = GR + RB + GB;
+            
             if avg < global_minh
                 global_minh = avg;
                 global_ih = i;

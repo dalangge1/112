@@ -29,6 +29,9 @@ function [ newB, newG, newR ] = humantouch( oldB, oldG, oldR )
     newB = circshift(oldB, [shiftyB shiftxB]);
     newG = circshift(oldG, [shiftyG shiftxG]); 
     newR = oldR;
+    
+    blueshift = [shiftyB shiftxB]
+    greenshift = [shiftyG shiftxG]
 
 end
 

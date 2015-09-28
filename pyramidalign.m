@@ -1,6 +1,6 @@
 function [ newB, newG, newR ] = pyramidalign( oldB, oldG, oldR )
     
-    pyrH = 4;
+    pyrH = 4; % Depth of pyramid
     
     ranges = [20 -20;  % blue vertical range
               20 -20;  % green vertical range
@@ -25,6 +25,9 @@ function [ newB, newG, newR ] = pyramidalign( oldB, oldG, oldR )
     newB = circshift(oldB, [bv bh]);
     newG = circshift(oldG, [gv gh]);
     newR = oldR;
+    
+    blueshift = [bv bh]
+    greenshift = [gv gh]
 
 end
 
