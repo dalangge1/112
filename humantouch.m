@@ -1,4 +1,9 @@
 function [ newB, newG, newR ] = humantouch( oldB, oldG, oldR )
+%HUMANTOUCH User alignment of input images.
+%   This function prompts the user to select the location of
+%   the same prominent feature on the three input images.
+%   It then uses the pixel differences in these three locations
+%   to align the images.
 
     figure
     title('Choose a well-defined point in the image.');
@@ -29,9 +34,6 @@ function [ newB, newG, newR ] = humantouch( oldB, oldG, oldR )
     newB = circshift(oldB, [shiftyB shiftxB]);
     newG = circshift(oldG, [shiftyG shiftxG]); 
     newR = oldR;
-    
-    blueshift = [shiftyB shiftxB]
-    greenshift = [shiftyG shiftxG]
 
 end
 
