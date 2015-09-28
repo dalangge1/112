@@ -10,11 +10,12 @@ close all
 % we will be reading and writing. You  will likely want to change the input and
 % output directories to match you personal environment.
 input_dir = 'prokudin-gorsky/';
-output_dir = './output/';
+output_dir = './output2/';
 file_ext = 'tif';
 file_names = dir([input_dir '*.' file_ext]); 
 
-file_name = '00888a.tif';
+file_name = '00933a.tif';
+
     
 %% Read image file
 % Here we read the input jpg file into a 3D array of 8-bit integers. Before we
@@ -53,7 +54,5 @@ figure
 imshow(orig)
 figure
 imshow(new);
-
-
 
 

@@ -32,5 +32,6 @@ function [ newB, newG, newR ] = pyramidalign( oldB, oldG, oldR )
     newB = circshift(oldB, [bv bh]);
     newG = circshift(oldG, [gv gh]);
     newR = oldR;
+    
 end
 

@@ -35,6 +35,6 @@ function [ newB, newG, newR ] = crossalign( oldB, oldG, oldR )
     newG = circshift(oldG, [gy gx]);
 
     newR = oldR;
-
+    
 end
 
